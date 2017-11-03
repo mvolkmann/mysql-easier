@@ -1,0 +1,24 @@
+{
+  "name": "mysql-easier",
+  "version": "1.0.0",
+  "description": "A Node package for interacting with a MySQL database",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mvolkmann/mysql-easier.git"
+  },
+  "keywords": [
+    "Node",
+    "MySQL"
+  ],
+  "author": "R. Mark Volkmann <r.mark.volkmann@gmail.com> (http://ociweb.com/mark)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mvolkmann/mysql-easier/issues"
+  },
+  "homepage": "https://github.com/mvolkmann/mysql-easier#readme",
+  "dependencies": {
+    "mysql": "^2.15.0"
+  }
+}
