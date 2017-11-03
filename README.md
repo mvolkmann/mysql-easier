@@ -94,6 +94,8 @@ This inserts a record into a given table
 and returns the id of the new record.
 The keys of obj are column names
 and their values are the values to insert.
+This assumes that the table has a column
+named `id` that is autoincrement.
 
 ```js
 mysql.insert('flavors', {name: 'vanilla', calories: 100})

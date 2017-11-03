@@ -98,14 +98,21 @@ class MySqlConnection {
    * The keys of obj are column names
    * and their values are the values to insert.
    */
-  insert(tableName, obj) {
+  async insert(tableName, obj) {
     const keys = Object.keys(obj);
     const values = keys.map(key => obj[key]);
     const cols = keys.join(',');
-    const placeholders = values.map((v, index) => '$' + (index + 1)).join(',');
-    const sql = `insert into ${tableName} (${cols}) values(${placeholders}) returning id`;
+    const placeholders = values.map(v => '?').join(',');
+    const sql = `insert into ${tableName} (${cols}) values(${placeholders})`;
     this.log('insert: sql =', sql);
-    return this.query(sql, ...values);
+
+    await this.query(sql, ...values);
+
+    const col = 'last_insert_id()';
+    const rows = await this.query(`select ${col}`);
+    const [row] = rows;
+    const id = row[col];
+    return id;
   }
 
   /**
