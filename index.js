@@ -1,15 +1,5 @@
 const mysql = require('mysql');
-
-/**
- * Helper function for working with ES6 promises.
- */
-function handle(resolve, reject, err, result) {
-  if (err) {
-    reject(err);
-  } else {
-    resolve(result);
-  }
-}
+const SqlUtil = require('./sql-util');
 
 class MySqlConnection {
 
@@ -37,19 +27,14 @@ class MySqlConnection {
    */
   constructor(config) {
     this.pool = new mysql.createPool(config);
-    this.debug = config.debug;
-  }
-
-  log(...msg) {
-    if (this.debug) console.log('mysql-easier.js:', msg.join(' '));
+    this.sqlUtil = new SqlUtil(this.pool, config.debug);
   }
 
   /**
    * Deletes all records from a given table.
    */
   deleteAll(tableName) {
-    const sql = `delete from ${tableName}`;
-    this.log('deleteAll: sql =', sql);
+    const sql = this.sqlUtil.deleteAll(tableName);
     return this.query(sql);
   }
 
@@ -58,8 +43,7 @@ class MySqlConnection {
    * This requires the table to have a column named "id".
    */
   deleteById(tableName, id) {
-    const sql = `delete from ${tableName} where id=$1`;
-    this.log('delete: sql =', sql);
+    const sql = this.sqlUtil.deleteById(tableName, id);
     return this.query(sql, id);
   }
 
@@ -67,19 +51,14 @@ class MySqlConnection {
    * Disconnects from the database.
    */
   disconnect() {
-    this.log('disconnecting');
-    if (this.pool) {
-      this.pool.end();
-      this.pool = null;
-    }
+    this.sqlUtil.disconnect();
   }
 
   /**
    * Gets all records from a given table.
    */
   getAll(tableName) {
-    const sql = `select * from ${tableName}`;
-    this.log('getAll: sql =', sql);
+    const sql = this.sqlUtil.getAll(tableName);
     return this.query(sql);
   }
 
@@ -88,8 +67,7 @@ class MySqlConnection {
    * This requires the table to have a column named "id".
    */
   getById(tableName, id) {
-    const sql = `select * from ${tableName} where id=$1`;
-    this.log('getById: sql =', sql);
+    const sql = this.sqlUtil.getById(tableName, id);
     return this.query(sql, id);
   }
 
@@ -99,19 +77,14 @@ class MySqlConnection {
    * and their values are the values to insert.
    */
   async insert(tableName, obj) {
+    const sql = this.sqlUtil.insert(tableName, obj);
+
     const keys = Object.keys(obj);
     const values = keys.map(key => obj[key]);
-    const cols = keys.join(',');
-    const placeholders = values.map(v => '?').join(',');
-    const sql = `insert into ${tableName} (${cols}) values(${placeholders})`;
-    this.log('insert: sql =', sql);
+    await this.query(sql[0], ...values);
 
-    await this.query(sql, ...values);
-
-    const col = 'last_insert_id()';
-    const rows = await this.query(`select ${col}`);
-    const [row] = rows;
-    const id = row[col];
+    const rows = await this.query(sql[1]);
+    const id = rows[0]['last_insert_id()'];
     return id;
   }
 
@@ -120,12 +93,20 @@ class MySqlConnection {
    * It is the most general purpose function provided.
    * This is used by several of the other functions.
    */
+  // eslint-disable-next-line require-await
   query(sql, ...params) {
     return new Promise((resolve, reject) => {
-      if (!this.pool) return reject('pool not configured');
-
-      this.pool.query(sql, params, (err, result) =>
-        handle(resolve, reject, err, result));
+      if (this.pool) {
+        this.pool.query(sql, params, (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        });
+      } else {
+        reject('pool not configured');
+      }
     });
   }
 
@@ -134,13 +115,7 @@ class MySqlConnection {
    * This requires the table to have a column named "id".
    */
   updateById(tableName, id, obj) {
-    const sets = Object.keys(obj).map(key => {
-      const v = obj[key];
-      const value = typeof v === 'string' ? `'${v}'` : v;
-      return `${key}=${value}`;
-    });
-    const sql = `update ${tableName} set ${sets} where id=$1`;
-    this.log('update: sql =', sql);
+    const sql = this.sqlUtil.updateById(tableName, id, obj);
     return this.query(sql, id);
   }
 }
