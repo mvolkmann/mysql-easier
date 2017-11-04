@@ -8,36 +8,41 @@ const mysql = new MySqlConnection({
 });
 
 async function doIt() {
-  await mysql.deleteAll('user');
+  const tableName = 'demo_user';
 
-  const id1 = await mysql.insert(
-    'user', {username: 'batman', password: 'robin'});
-  console.log('id1 =', id1);
+  try {
+    await mysql.deleteAll(tableName);
 
-  const id2 = await mysql.insert(
-    'user', {username: 'joker', password: 'penguin'});
-  console.log('id2 =', id2);
+    const id1 = await mysql.insert(
+      tableName, {username: 'batman', password: 'robin'});
+    console.log('id1 =', id1);
 
-  let result = await mysql.getAll('user');
-  console.log('all =', result);
+    const id2 = await mysql.insert(
+      tableName, {username: 'joker', password: 'penguin'});
+    console.log('id2 =', id2);
 
-  result = await mysql.updateById(
-    'user', id1, {username: 'batman', password: 'wayne'});
+    let result = await mysql.getAll(tableName);
+    console.log('all =', result);
 
-  result = await mysql.getById('user', id1);
-  console.log('just id1 after update =', result);
+    result = await mysql.updateById(
+      tableName, id1, {username: 'batman', password: 'wayne'});
 
-  const sql = 'select * from user where password = ?';
-  result = await mysql.query(sql, 'wayne');
-  console.log('query result =', result);
+    result = await mysql.getById(tableName, id1);
+    console.log('just id1 after update =', result);
 
-  await mysql.deleteById('user', id1);
+    const sql = `select * from ${tableName} where password = ?`;
+    result = await mysql.query(sql, 'wayne');
+    console.log('query result =', result);
 
-  result = await mysql.getAll('user');
-  //const result = await mysql.query('select * from user');
-  console.log('after deleting id1 =', result);
+    await mysql.deleteById(tableName, id1);
 
-  mysql.disconnect();
+    result = await mysql.getAll(tableName);
+    console.log('after deleting id1 =', result);
+  } catch (e) {
+    console.error(e);
+  } finally {
+    mysql.disconnect();
+  }
 }
 
 doIt();

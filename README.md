@@ -24,6 +24,21 @@ The config object can contain these properties:
 
 The only one of these that is always required is "database".
 
+## Demo
+To run the demo code, follow these steps:
+1) Start database daemon with "mysql.server start".
+2) Start interactive mode with "mysql -uroot".
+3) Create the demo database with "create database demo".
+4) Select the database with "use demo".
+4) Create a table with
+   create table demo_user (
+     id int auto_increment primary key,
+     username text,
+     password text
+   );
+5) Exit interactive mode with "exit".
+6) Run the demo with "npm run demo".
+
 MySqlConnection objects provide seven methods.
 All but `disconnect` return a promise.
 One way to use the returned promise is to chain calls to `then` and `catch`.

@@ -32,7 +32,7 @@ class SqlUtil {
    * Disconnects from the database.
    */
   disconnect() {
-    this.log('disconnecting', this.pool);
+    this.log('disconnecting');
     if (this.pool) {
       this.pool.end();
       this.pool = null;
