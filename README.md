@@ -8,7 +8,8 @@ It has the same API as https://github.com/mvolkmann/postgresql-easy.
 
 To install this, run `npm install -S mysql-easier`
 
-To use this,
+## Setup
+
 ```js
 const MySqlConnection = require('mysql-easier');
 const mysql = new MySqlConnection(config);
@@ -31,18 +32,18 @@ The only one of these that is always required is "database".
 ## Demo
 
 To run the demo code, follow these steps:
-1) Start database daemon with "mysql.server start".
-2) Start interactive mode with "mysql -uroot".
-3) Create the demo database with "create database demo".
-4) Select the database with "use demo".
+1) Start database daemon with `mysql.server start`
+2) Start interactive mode with `mysql -uroot`
+3) Create the demo database with `create database demo`
+4) Select the database with `use demo`
 4) Create a table with
    create table demo_user (
      id int auto_increment primary key,
      username text,
      password text
    );
-5) Exit interactive mode with "exit".
-6) Run the demo with "npm run demo".
+5) Exit interactive mode with `exit`.
+6) Run the demo with `npm run demo`
 
 ## API
 
