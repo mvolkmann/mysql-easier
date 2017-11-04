@@ -1,6 +1,10 @@
+# mysql-easier
+
+[![Build Status](https://secure.travis-ci.org/mvolkmann/mysql-easier.png)](http://travis-ci.org/mvolkmann/mysql-easier)
+
 This is a Node module that makes it very simple
 to interact with MySQL databases.
-It has the same API as postgresql-easy.
+It has the same API as https://github.com/mvolkmann/postgresql-easy.
 
 To install this, run `npm install -S mysql-easier`
 
@@ -25,6 +29,7 @@ The config object can contain these properties:
 The only one of these that is always required is "database".
 
 ## Demo
+
 To run the demo code, follow these steps:
 1) Start database daemon with "mysql.server start".
 2) Start interactive mode with "mysql -uroot".
@@ -38,6 +43,8 @@ To run the demo code, follow these steps:
    );
 5) Exit interactive mode with "exit".
 6) Run the demo with "npm run demo".
+
+## API
 
 MySqlConnection objects provide seven methods.
 All but `disconnect` return a promise.
