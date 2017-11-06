@@ -36,14 +36,16 @@ To run the demo code, follow these steps:
 2) Start interactive mode with `mysql -uroot`
 3) Create the demo database with `create database demo`
 4) Select the database with `use demo`
-4) Create a table with
+5) Create a table with
    create table demo_user (
      id int auto_increment primary key,
      username text,
      password text
    );
-5) Exit interactive mode with `exit`.
-6) Run the demo with `npm run demo`
+6) Get list of tables `show tables;`
+7) See description of newly created table with `describe demo_user;`
+8) Exit interactive mode with `exit`.
+9) Run the demo with `npm run demo`
 
 ## API
 
