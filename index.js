@@ -66,9 +66,10 @@ class MySqlConnection {
    * Gets a record from a given table by id.
    * This requires the table to have a column named "id".
    */
-  getById(tableName, id) {
+  async getById(tableName, id) {
     const sql = this.sqlUtil.getById(tableName, id);
-    return this.query(sql, id);
+    const rows = await this.query(sql, id);
+    return rows[0];
   }
 
   /**

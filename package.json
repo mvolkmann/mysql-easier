@@ -1,6 +1,6 @@
 {
   "name": "mysql-easier",
-  "version": "1.0.6",
+  "version": "1.1.0",
   "description": "A Node package for interacting with a MySQL database",
   "main": "index.js",
   "scripts": {
