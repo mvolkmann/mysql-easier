@@ -93,8 +93,8 @@ This gets all records from a given table.
 
 ```js
 mysql.getAll('flavors')
-  .then(result => {
-    // Process data in the array result.rows.
+  .then(rows => {
+    // Process data in the array rows.
   })
   .catch(err => {
     // Handle the error.
@@ -107,8 +107,8 @@ It requires the table to have a column named "id".
 
 ```js
 mysql.getById('flavors', 7)
-  .then(result => {
-    // Process data in the array result.rows.
+  .then(rows => {
+    // Process data in the array rows.
   })
   .catch(err => {
     // Handle the error.
@@ -125,9 +125,9 @@ named `id` that is autoincrement.
 
 ```js
 mysql.insert('flavors', {name: 'vanilla', calories: 100})
-  .then(result => {
+  .then(rows => {
     // Do something after successful insert.
-    // result.rows[0] will be an object describing the inserted row.
+    // rows[0] will be an object describing the inserted row.
   })
   .catch(err => {
     // Handle the error.
@@ -141,8 +141,8 @@ It is used by several of the other functions.
 
 ```js
 mysql.query('select name from flavors where calories < 150')
-  .then(result => {
-    // Do something with the result set in result.rows.
+  .then(rows => {
+    // Process data in the array rows.
   })
   .catch(err => {
     // Handle the error.
@@ -150,8 +150,8 @@ mysql.query('select name from flavors where calories < 150')
 
 const sql = 'select name from flavors where calories < $1 and cost < $2';
 mysql.query(sql, 200, 3)
-  .then(result => {
-    // Do something with the result set in result.rows.
+  .then(rows => {
+    // Process data in the array rows.
   })
   .catch(err => {
     // Handle the error.
@@ -164,9 +164,8 @@ It requires the table to have a column named "id".
 
 ```js
 mysql.updateById('flavors', 7, {name: 'chocolate', calories: 200})
-  .then(result => {
-    // Do something with the result set in result.rows.
-    // result.rows[0] will be an object describing the updated row.
+  .then(rows => {
+    // Process data in the array rows which contains the updated rows.
   })
   .catch(err => {
     // Handle the error.
