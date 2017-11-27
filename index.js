@@ -4,22 +4,22 @@ const SqlUtil = require('./sql-util');
 class MySqlConnection {
 
   /**
-   * This configures a PostgreSQLconnection pool.
+   * This configures a MySQL connection pool.
    * The object created can be used to interact with a given database.
    *
    * To use this,
-   * const PgConnection = require('postgresql-easy');
-   * const pg = new PgConnection(config);
+   * const MySqlConnection = require('mysql-easier');
+   * const mysql = new MySqlConnection(config);
    *
    * The config object can contain these properties:
-   *   host: defaults to localhost
-   *   user: if database requires authentication
-   *   password: if database requires authentication
-   *   database: the name of the database to use
-   *   debug: true to output messages describing each action; defaults to false
    *   acquireTimeout: time before the connection is closed; default is 30000
    *   connectionLimit: maximum number of concurrent connections; default is 10
-   *   queueLimit: maximum number of queuedconnection requests; default is 0
+   *   database: the name of the database to use
+   *   debug: true to output messages describing each action; defaults to false
+   *   host: defaults to localhost
+   *   password: if database requires authentication
+   *   queueLimit: maximum number of queued connection requests; default is 0
+   *   user: if database requires authentication
    *   waitForConnections: boolean that determines if connection requests
    *   should be queued if there are no available connections; default is true
    *
