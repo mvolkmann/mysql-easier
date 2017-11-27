@@ -22,10 +22,9 @@ The config object can contain these properties:
 * `debug`: true to output messages describing each action; defaults to false
 * `host`: defaults to localhost
 * `password`: if database requires authentication
-* `queueLimit`: maximum number of queuedconnection requests; default is 0
+* `queueLimit`: maximum number of queued connection requests; default is 0
 * `user`: if database requires authentication
-* `waitForConnections`: boolean that determines if connection requests
-*   should be queued if there are no available connections; default is true
+* `waitForConnections`: boolean that determines if connection requests should be queued if there are no available connections; default is true
 
 The only one of these that is always required is "database".
 
