@@ -57,13 +57,12 @@ Another is to use `async` and `await`.
 This deletes all records from a given table.
 
 ```js
-mysql.deleteAll('flavors')
-  .then(() => {
-    // Do something after successful delete.
-  })
-  .catch(err => {
-    // Handle the error.
-  });
+try {
+  const mysql.deleteAll('flavors');
+  // Do something after successful delete.
+} catch (e) {
+  // Handle the error.
+}
 ```
 
 ## `deleteById`
@@ -71,13 +70,12 @@ This deletes a record from a given table by id.
 It requires the table to have a column named "id".
 
 ```js
-mysql.delete('flavors', 7)
-  .then(() => {
-    // Do something after successful delete.
-  })
-  .catch(err => {
-    // Handle the error.
-  });
+try {
+  await mysql.delete('flavors', 7);
+  // Do something after successful delete.
+} catch (e) {
+  // Handle the error.
+}
 ```
 
 ## `disconnect`
@@ -91,13 +89,12 @@ mysql.disconnect();
 This gets all records from a given table.
 
 ```js
-mysql.getAll('flavors')
-  .then(rows => {
-    // Process data in the array rows.
-  })
-  .catch(err => {
-    // Handle the error.
-  });
+try {
+  const rows = await mysql.getAll('flavors');
+  // Process data in the array rows.
+} catch (e) {
+  // Handle the error.
+}
 ```
 
 ## `getById`
@@ -105,13 +102,26 @@ This gets a record from a given table by id.
 It requires the table to have a column named "id".
 
 ```js
-mysql.getById('flavors', 7)
-  .then(rows => {
-    // Process data in the array rows.
-  })
-  .catch(err => {
-    // Handle the error.
-  });
+try {
+  const rows = await mysql.getById('flavors', 7);
+  // Process data in the array rows.
+} catch (e) {
+  // Handle the error.
+}
+```
+
+## `getConnection`
+This gets a connection to the database.
+It is only useful for stepping outside the API
+of this library and directly using the API of the mysql library on which this one is based.
+
+```js
+try {
+  const connection = await mysql.getConnection();
+  // Use the connection.
+} catch (e) {
+  // Handle the error.
+}
 ```
 
 ## `insert`
@@ -123,14 +133,13 @@ This assumes that the table has a column
 named `id` that is autoincrement.
 
 ```js
-mysql.insert('flavors', {name: 'vanilla', calories: 100})
-  .then(rows => {
-    // Do something after successful insert.
-    // rows[0] will be an object describing the inserted row.
-  })
-  .catch(err => {
-    // Handle the error.
-  });
+try {
+  const rows = await mysql.insert('flavors', {name: 'vanilla', calories: 100});
+  // Do something after successful insert.
+  // rows[0] will be an object describing the inserted row.
+} catch (e) {
+  // Handle the error.
+}
 ```
 
 ## `query`
@@ -139,22 +148,49 @@ It is the most general purpose function provided.
 It is used by several of the other functions.
 
 ```js
-mysql.query('select name from flavors where calories < 150')
-  .then(rows => {
-    // Process data in the array rows.
-  })
-  .catch(err => {
-    // Handle the error.
-  });
+try {
+  const rows = await mysql.query('select name from flavors where calories < 150');
+  // Process data in the array rows.
+} catch (e) {
+  // Handle the error.
+}
 
-const sql = 'select name from flavors where calories < $1 and cost < $2';
-mysql.query(sql, 200, 3)
-  .then(rows => {
-    // Process data in the array rows.
-  })
-  .catch(err => {
-    // Handle the error.
-  });
+try {
+  const sql = 'select name from flavors where calories < $1 and cost < $2';
+  const rows = await mysql.query(sql, 200, 3);
+  // Process data in the array rows.
+} catch (e) {
+  // Handle the error.
+}
+```
+
+## `releaseConnection`
+This releases the current connection to the database.
+This would typically only be used if `getConnection`
+is also being used.
+
+```js
+mysql.releaseConnection();
+```
+
+## `transaction`
+Executes a given function inside a transaction.
+This function can call other functions in this API
+to perform database operations.
+The function must return a promise to indicate
+when it has completed (resolve)
+or when an error has occurred (reject).
+If the function throws an error or rejects,
+the transaction is rolled back.
+Otherwise it is committed.
+
+```js
+try {
+  await mysql.transaction(someFunction);
+  // Do more work after the transaction commits.
+} catch (e) {
+  // Handle the error.
+}
 ```
 
 ## `updateById`
@@ -162,11 +198,10 @@ This updates a record in a given table by id.
 It requires the table to have a column named "id".
 
 ```js
-mysql.updateById('flavors', 7, {name: 'chocolate', calories: 200})
-  .then(rows => {
-    // Process data in the array rows which contains the updated rows.
-  })
-  .catch(err => {
-    // Handle the error.
-  });
+try {
+  const rows = await mysql.updateById('flavors', 7, {name: 'chocolate', calories: 200});
+  // Process data in the array rows which contains the updated rows.
+} catch (e) {
+  // Handle the error.
+}
 ```
