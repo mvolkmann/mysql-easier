@@ -174,12 +174,12 @@ mysql.releaseConnection();
 ```
 
 ## `transaction`
-Executes a given function inside a transaction.
+This executes a given function inside a transaction.
 This function can call other functions in this API
 to perform database operations.
 The function must return a promise to indicate
-when it has completed (resolve)
-or when an error has occurred (reject).
+when it has completed (`resolve`)
+or when an error has occurred (`reject`).
 If the function throws an error or rejects,
 the transaction is rolled back.
 Otherwise it is committed.
