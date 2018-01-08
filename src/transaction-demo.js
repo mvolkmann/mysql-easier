@@ -11,7 +11,7 @@ const tableName = 'demo_user';
 
 async function doIt() {
   try {
-    await mysql.transaction(async () => {
+    const transactionResult = await mysql.transaction(async () => {
       console.log('transaction-demo.js: inside transaction');
       await mysql.deleteAll(tableName);
 
@@ -40,7 +40,10 @@ async function doIt() {
 
       result = await mysql.getAll(tableName);
       console.log('after deleting id1 =', result);
+
+      return result;
     });
+    console.log('transaction-demo.js: result from transaction =', transactionResult);
   } catch (e) {
     console.error(e);
   } finally {
