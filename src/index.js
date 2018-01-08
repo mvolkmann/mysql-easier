@@ -151,10 +151,10 @@ class MySqlConnection {
         }
 
         try {
-          await fn();
+          const result = await fn();
           connection.commit(err => {
             if (err) throw err;
-            resolve();
+            resolve(result);
           });
         } catch (e) {
           connection.rollback(() => reject(e));
