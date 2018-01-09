@@ -130,13 +130,13 @@ and returns the id of the new record.
 The keys of obj are column names
 and their values are the values to insert.
 This assumes that the table has a column
-named `id` that is autoincrement.
+named `id` that is auto_increment.
 
 ```js
 try {
-  const rows = await mysql.insert('flavors', {name: 'vanilla', calories: 100});
+  const newId = await mysql.insert('flavors', {name: 'vanilla', calories: 100});
   // Do something after successful insert.
-  // rows[0] will be an object describing the inserted row.
+  // newId will be the id of the newly-inserted row.
 } catch (e) {
   // Handle the error.
 }
