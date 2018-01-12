@@ -180,7 +180,7 @@ class MySqlConnection {
    * and their values are the values to insert.
    */
   async upsert(tableName, obj) {
-    const sql = this.sqlUtil.insert(tableName, obj);
+    const sql = this.sqlUtil.upsert(tableName, obj);
 
     const keys = Object.keys(obj);
     const values = keys.map(key => obj[key]);
