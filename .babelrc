@@ -4,7 +4,12 @@
       "targets": {
         "browsers": ["last 2 versions"],
         "node": 8.0
-      }
+      },
+      "useBuiltins": true,
+      "exclude": [
+        "babel-plugin-transform-regenerator",
+        "transform-async-to-generator"
+      ]
     }]
   ],
   "plugins": ["transform-object-rest-spread"]

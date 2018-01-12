@@ -205,3 +205,21 @@ try {
   // Handle the error.
 }
 ```
+## `upsert`
+This is like `insert`, but if the row already exists, it is updated.
+It returns the id of the new or existing record..
+The keys of obj are column names
+and their values are the values to insert.
+This assumes that the table has a column
+named `id` that is auto_increment.
+
+```js
+try {
+  const newId = await mysql.upsert('flavors', {name: 'vanilla', calories: 100});
+  // Do something after successful upsert.
+  // newId will be the id of the new or exising row.
+} catch (e) {
+  // Handle the error.
+}
+```
+
