@@ -1,6 +1,8 @@
 {
   "env": {
+    "browser": true,
     "es6": true,
+    "jasmine": true,
     "jest": true,
     "node": true
   },
@@ -10,14 +12,18 @@
     "beforeEach": false,
     "describe": false,
     "it": false,
-    "test": false
+    "test": false,
+    "$": false
   },
 
   "parser": "babel-eslint",
 
   "parserOptions": {
     "ecmaVersion": 7,
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
 
   "plugins": [
@@ -74,10 +80,9 @@
     "max-depth": ["warn", 5],
     "max-len": ["warn", 80, 4],
     "max-lines": "off",
-    "max-nested-callbacks": ["error", 4],
+    "max-nested-callbacks": ["error", 8],
     "max-params": "off",
     "max-statements": ["warn", 50],
-    "max-statements-per-line": "off",
     "multiline-ternary": "off",
     "new-cap": "off",
     "new-parens": "error",
@@ -226,7 +231,6 @@
     "one-var": "off",
     "one-var-declaration-per-line": "off",
     "operator-assignment": ["error", "always"],
-    "operator-linebreak": ["error", "after"],
     "padded-blocks": "off",
     "prefer-arrow-callback": "error",
     "prefer-const": "error",

@@ -50,4 +50,14 @@ describe('sql', () => {
     ];
     expect(sqlUtil.insert(tableName, obj)).toEqual(expected);
   });
+
+  test('upsert', () => {
+    const obj = {foo: true, bar: 7, baz: 'qux'};
+    const expected = [
+      `insert into ${tableName} (foo, bar, baz) values(?, ?, ?) ` +
+      'on duplicate key update id = last_insert_id(id), foo = ?, bar = ?, baz = ?',
+      'select last_insert_id()'
+    ];
+    expect(sqlUtil.upsert(tableName, obj)).toEqual(expected);
+  });
 });

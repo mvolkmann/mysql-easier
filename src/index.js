@@ -2,7 +2,6 @@ const mysql = require('mysql');
 const SqlUtil = require('./sql-util');
 
 class MySqlConnection {
-
   /**
    * This configures a MySQL connection pool.
    * The object created can be used to interact with a given database.
@@ -115,7 +114,7 @@ class MySqlConnection {
     return new Promise(async (resolve, reject) => {
       const connection = await this.getConnection();
       connection.query(sql, params, (err, result) => {
-      //this.pool.query(sql, params, (err, result) => {
+        //this.pool.query(sql, params, (err, result) => {
         if (err) {
           reject(err);
         } else {
@@ -172,6 +171,24 @@ class MySqlConnection {
   updateById(tableName, id, obj) {
     const sql = this.sqlUtil.updateById(tableName, id, obj);
     return this.query(sql, id);
+  }
+
+  /**
+   * Inserts a record into a given table if it doesn't already exist.
+   * Updates it if it does exist.
+   * The keys of obj are column names
+   * and their values are the values to insert.
+   */
+  async upsert(tableName, obj) {
+    const sql = this.sqlUtil.insert(tableName, obj);
+
+    const keys = Object.keys(obj);
+    const values = keys.map(key => obj[key]);
+    await this.query(sql[0], ...values, ...values);
+
+    const rows = await this.query(sql[1]);
+    const id = rows[0]['last_insert_id()'];
+    return id;
   }
 }
 

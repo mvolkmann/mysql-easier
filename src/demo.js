@@ -13,19 +13,25 @@ async function doIt() {
   try {
     await mysql.deleteAll(tableName);
 
-    const id1 = await mysql.insert(
-      tableName, {username: 'batman', password: 'robin'});
+    const id1 = await mysql.insert(tableName, {
+      username: 'batman',
+      password: 'robin'
+    });
     console.log('id1 =', id1);
 
-    const id2 = await mysql.insert(
-      tableName, {username: 'joker', password: 'penguin'});
+    const id2 = await mysql.insert(tableName, {
+      username: 'joker',
+      password: 'penguin'
+    });
     console.log('id2 =', id2);
 
     let result = await mysql.getAll(tableName);
     console.log('all =', result);
 
-    result = await mysql.updateById(
-      tableName, id1, {username: 'batman', password: 'wayne'});
+    result = await mysql.updateById(tableName, id1, {
+      username: 'batman',
+      password: 'wayne'
+    });
 
     result = await mysql.getById(tableName, id1);
     console.log('just id1 after update =', result);

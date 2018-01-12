@@ -1,5 +1,4 @@
 class SqlUtil {
-
   constructor(pool, debug) {
     this.pool = pool;
     this.debug = debug;
@@ -90,6 +89,30 @@ class SqlUtil {
     });
     const sql = `update ${tableName} set ${sets} where id=?`;
     this.log('update: sql =', sql);
+    return sql;
+  }
+
+  /**
+   * Inserts a record in a given table if it doesn't already exist.
+   * Updates it if it does exist.
+   */
+  upsert(tableName, obj) {
+    const keys = Object.keys(obj);
+    const values = keys.map(key => obj[key]);
+    const cols = keys.join(', ');
+    const placeholders = values.map(() => '?').join(', ');
+    const part1 = `insert into ${tableName} (${cols}) values(${placeholders})`;
+
+    const assignments = keys.map(key => key + ' = ?').join(', ');
+    const part2 =
+      'on duplicate key update id = last_insert_id(id), ' + assignments;
+    const sql1 = part1 + ' ' + part2;
+
+    const col = 'last_insert_id()';
+    const sql2 = `select ${col}`;
+
+    const sql = [sql1, sql2];
+    this.log('insert: sql =', sql);
     return sql;
   }
 }
