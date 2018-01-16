@@ -49,7 +49,6 @@ To run the demo code, follow these steps:
 ## API
 
 MySqlConnection objects provide seven methods.
-All but `disconnect` return a promise.
 One way to use the returned promise is to chain calls to `then` and `catch`.
 Another is to use `async` and `await`.
 
@@ -119,6 +118,7 @@ of this library and directly using the API of the mysql library on which this on
 try {
   const connection = await mysql.getConnection();
   // Use the connection.
+  connection.release();
 } catch (e) {
   // Handle the error.
 }
@@ -162,15 +162,6 @@ try {
 } catch (e) {
   // Handle the error.
 }
-```
-
-## `releaseConnection`
-This releases the current connection to the database.
-This would typically only be used if `getConnection`
-is also being used.
-
-```js
-mysql.releaseConnection();
 ```
 
 ## `transaction`

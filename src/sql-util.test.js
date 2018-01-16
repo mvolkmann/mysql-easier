@@ -5,15 +5,10 @@ describe('sql', () => {
   let sqlUtil;
 
   beforeEach(() => {
-    const pool = {
-      end() {}
-    };
-    sqlUtil = new SqlUtil(pool, false);
+    sqlUtil = new SqlUtil(false);
   });
 
   test('constructor', () => {
-    expect(typeof sqlUtil.pool).toBe('object');
-    expect(Object.keys(sqlUtil.pool)).toEqual(['end']);
     expect(sqlUtil.debug).toBe(false);
   });
 
@@ -25,11 +20,6 @@ describe('sql', () => {
   test('deleteById', () => {
     const expected = `delete from ${tableName} where id=?`;
     expect(sqlUtil.deleteById(tableName, 7)).toBe(expected);
-  });
-
-  test('disconnect', () => {
-    sqlUtil.disconnect();
-    expect(sqlUtil.pool).toBeNull();
   });
 
   test('getAll', () => {

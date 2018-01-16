@@ -26,7 +26,7 @@ class MySqlConnection {
    */
   constructor(config) {
     this.pool = new mysql.createPool(config);
-    this.sqlUtil = new SqlUtil(this.pool, config.debug);
+    this.sqlUtil = new SqlUtil(config.debug);
   }
 
   /**
@@ -50,8 +50,16 @@ class MySqlConnection {
    * Disconnects from the database.
    */
   disconnect() {
-    this.sqlUtil.disconnect();
-    this.connection = null;
+    return new Promise((resolve, reject) => {
+      this.pool.end(err => {
+        this.pool = null;
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
   }
 
   /**
@@ -73,14 +81,11 @@ class MySqlConnection {
   }
 
   getConnection() {
-    if (this.connection) return Promise.resolve(this.connection);
-
     return new Promise((resolve, reject) => {
       this.pool.getConnection((err, connection) => {
         if (err) {
           reject(err);
         } else {
-          this.connection = connection;
           resolve(connection);
         }
       });
@@ -111,10 +116,8 @@ class MySqlConnection {
    */
   // eslint-disable-next-line require-await
   query(sql, ...params) {
-    return new Promise(async (resolve, reject) => {
-      const connection = await this.getConnection();
-      connection.query(sql, params, (err, result) => {
-        //this.pool.query(sql, params, (err, result) => {
+    return new Promise((resolve, reject) => {
+      this.pool.query(sql, params, (err, result) => {
         if (err) {
           reject(err);
         } else {
@@ -122,11 +125,6 @@ class MySqlConnection {
         }
       });
     });
-  }
-
-  releaseConnection() {
-    this.connection.release();
-    this.connection = null;
   }
 
   /**
@@ -145,7 +143,7 @@ class MySqlConnection {
       const connection = await this.getConnection();
       connection.beginTransaction(async err => {
         if (err) {
-          this.releaseConnection();
+          connection.release();
           reject(err);
         }
 
@@ -158,7 +156,7 @@ class MySqlConnection {
         } catch (e) {
           connection.rollback(() => reject(e));
         } finally {
-          this.releaseConnection();
+          connection.release();
         }
       });
     });
