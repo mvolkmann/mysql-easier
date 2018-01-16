@@ -1,6 +1,5 @@
 class SqlUtil {
-  constructor(pool, debug) {
-    this.pool = pool;
+  constructor(debug) {
     this.debug = debug;
   }
 
@@ -25,17 +24,6 @@ class SqlUtil {
     const sql = `delete from ${tableName} where id=?`;
     this.log('deleteById: sql =', sql);
     return sql;
-  }
-
-  /**
-   * Disconnects from the database.
-   */
-  disconnect() {
-    this.log('disconnecting');
-    if (this.pool) {
-      this.pool.end();
-      this.pool = null;
-    }
   }
 
   /**
