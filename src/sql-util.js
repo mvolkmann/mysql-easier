@@ -55,12 +55,8 @@ class SqlUtil {
     const values = keys.map(key => obj[key]);
     const cols = keys.join(', ');
     const placeholders = values.map(() => '?').join(', ');
-    const sql1 = `insert into ${tableName} (${cols}) values(${placeholders})`;
+    const sql = `insert into ${tableName} (${cols}) values(${placeholders})`;
 
-    const col = 'last_insert_id()';
-    const sql2 = `select ${col}`;
-
-    const sql = [sql1, sql2];
     this.log('insert: sql =', sql);
     return sql;
   }
