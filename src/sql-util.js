@@ -72,7 +72,7 @@ class SqlUtil {
       return `${key}=${value}`;
     });
     const sql = `update ${tableName} set ${sets} where id=?`;
-    this.log('update: sql =', sql);
+    this.log('updateById: sql =', sql);
     return sql;
   }
 
@@ -90,13 +90,9 @@ class SqlUtil {
     const assignments = keys.map(key => key + ' = ?').join(', ');
     const part2 =
       'on duplicate key update id = last_insert_id(id), ' + assignments;
-    const sql1 = part1 + ' ' + part2;
+    const sql = part1 + ' ' + part2;
 
-    const col = 'last_insert_id()';
-    const sql2 = `select ${col}`;
-
-    const sql = [sql1, sql2];
-    this.log('insert: sql =', sql);
+    this.log('upsert: sql =', sql);
     return sql;
   }
 }
