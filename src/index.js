@@ -102,11 +102,9 @@ class MySqlConnection {
 
     const keys = Object.keys(obj);
     const values = keys.map(key => obj[key]);
-    await this.query(sql[0], ...values);
+    const result = await this.query(sql, ...values);
 
-    const rows = await this.query(sql[1]);
-    const id = rows[0]['last_insert_id()'];
-    return id;
+    return result.insertId;
   }
 
   /**

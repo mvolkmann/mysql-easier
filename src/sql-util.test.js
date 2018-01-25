@@ -34,10 +34,7 @@ describe('sql', () => {
 
   test('insert', () => {
     const obj = {foo: true, bar: 7, baz: 'qux'};
-    const expected = [
-      `insert into ${tableName} (foo, bar, baz) values(?, ?, ?)`,
-      'select last_insert_id()'
-    ];
+    const expected = `insert into ${tableName} (foo, bar, baz) values(?, ?, ?)`;
     expect(sqlUtil.insert(tableName, obj)).toEqual(expected);
   });
 
