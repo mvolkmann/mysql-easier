@@ -1,28 +1,7 @@
 const SqlUtil = require('./sql-util');
 
 class MySqlConnection {
-  /**
-   * This configures a MySQL connection pool.
-   * The object created can be used to interact with a given database.
-   *
-   * To use this,
-   * const MySqlConnection = require('mysql-easier');
-   * const mysql = new MySqlConnection(config);
-   *
-   * The config object can contain these properties:
-   *   acquireTimeout: time before the connection is closed; default is 30000
-   *   connectionLimit: maximum number of concurrent connections; default is 10
-   *   database: the name of the database to use
-   *   debug: true to output messages describing each action; defaults to false
-   *   host: defaults to localhost
-   *   password: if database requires authentication
-   *   queueLimit: maximum number of queued connection requests; default is 0
-   *   user: if database requires authentication
-   *   waitForConnections: boolean that determines if connection requests
-   *   should be queued if there are no available connections; default is true
-   *
-   * The only one of these that is always required is "database".
-   */
+
   constructor(connection, config) {
     const debug = config && config.debug;
     this.connection = connection;
