@@ -1,4 +1,3 @@
-const mysql = require('mysql');
 const SqlUtil = require('./sql-util');
 
 class MySqlConnection {
@@ -24,9 +23,10 @@ class MySqlConnection {
    *
    * The only one of these that is always required is "database".
    */
-  constructor(config) {
-    this.pool = new mysql.createPool(config);
-    this.sqlUtil = new SqlUtil(config.debug);
+  constructor(connection, config) {
+    const debug = config && config.debug;
+    this.connection = connection;
+    this.sqlUtil = new SqlUtil(debug);
   }
 
   /**
@@ -46,20 +46,57 @@ class MySqlConnection {
     return this.query(sql, id);
   }
 
+  destroy() {
+    if (this.connection) {
+      this.connection.destroy();
+      this.connection = null;
+    }
+  }
+
   /**
-   * Disconnects from the database.
+   * Connection is no longer needed.
    */
-  disconnect() {
-    return new Promise((resolve, reject) => {
-      this.pool.end(err => {
-        this.pool = null;
-        if (err) {
-          reject(err);
-        } else {
-          resolve();
-        }
+  done() {
+    const conn = this.connection;
+    this.connection = null;
+
+    if (!conn) {
+      return Promise.resolve();
+    }
+
+    if (typeof conn.release === 'function') {
+      try {
+        conn.release();
+        return Promise.resolve();
+      } catch (err) {
+        return Promise.reject(err);
+      }
+    }
+
+    if (typeof conn.end === 'function') {
+      return new Promise((resolve, reject) => {
+        conn.end(err => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve();
+          }
+        });
       });
-    });
+    }
+
+    // Technically, if this is true, one of the methods above
+    // should have been available and we wouldn't get here.
+    if (typeof conn.destroy === 'function') {
+      try {
+        conn.destroy();
+        return Promise.resolve();
+      } catch (err) {
+        return Promise.reject(err);
+      }
+    }
+
+    return Promise.reject('Unrecognizable connection type.');
   }
 
   /**
@@ -78,18 +115,6 @@ class MySqlConnection {
     const sql = this.sqlUtil.getById(tableName, id);
     const rows = await this.query(sql, id);
     return rows[0];
-  }
-
-  getConnection() {
-    return new Promise((resolve, reject) => {
-      this.pool.getConnection((err, connection) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(connection);
-        }
-      });
-    });
   }
 
   /**
@@ -114,8 +139,10 @@ class MySqlConnection {
    */
   // eslint-disable-next-line require-await
   query(sql, ...params) {
+    if (!this.connection) return Promise.reject('Connection not available.');
+
     return new Promise((resolve, reject) => {
-      this.pool.query(sql, params, (err, result) => {
+      this.connection.query(sql, params, (err, result) => {
         if (err) {
           reject(err);
         } else {
@@ -137,24 +164,22 @@ class MySqlConnection {
    * Otherwise it is committed.
    */
   transaction(fn) {
-    return new Promise(async (resolve, reject) => {
-      const connection = await this.getConnection();
-      connection.beginTransaction(async err => {
+    if (!this.connection) return Promise.reject('Connection not available.');
+
+    return new Promise((resolve, reject) => {
+      this.connection.beginTransaction(async err => {
         if (err) {
-          connection.release();
           reject(err);
         }
 
         try {
           const result = await fn();
-          connection.commit(err => {
+          this.connection.commit(err => {
             if (err) throw err;
             resolve(result);
           });
         } catch (e) {
-          connection.rollback(() => reject(e));
-        } finally {
-          connection.release();
+          this.connection.rollback(() => reject(e));
         }
       });
     });
