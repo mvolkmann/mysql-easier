@@ -24,13 +24,13 @@ class MySqlPool {
   getConnection() {
     return new Promise((resolve, reject) => {
       if (!this.pool) {
-        reject('Pool has ended. New connections are not available.');
+        reject('Pool has ended. Connections are not available.');
       } else {
         this.pool.getConnection((err, connection) => {
           if (err) {
             reject(err);
           } else {
-            resolve(new MySqlConnection(connection));
+            resolve(new MySqlConnection(connection, this.config));
           }
         });
       }
