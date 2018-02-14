@@ -1,21 +1,21 @@
 const mysql = require('mysql');
 const MySqlConnection = require('./mysql-connection');
 
+/**
+ * MySqlPool
+ * This class wraps a 'Pool' from mysqljs as described here:
+ *  + https://github.com/mysqljs/mysql#pooling-connections
+ *
+ * The basic benefits it provides are:
+ *  1 - Functions use Promises instead of callbacks
+ *  2 - Connections that are created are instances of our own
+ *      MySqlConnection - which provides convenience methods for common
+ *      database operations.
+ *
+ * If you require additional control, you can access the mysqljs 'Pool' by
+ * going directly to the `pool` property of this object.
+ */
 class MySqlPool {
-  /**
-   * MySqlPool
-   * This class wraps a 'Pool' from mysqljs as described here:
-   *  + https://github.com/mysqljs/mysql#pooling-connections
-   *
-   * The basic benefits it provides are:
-   *  1 - Functions use Promises instead of callbacks
-   *  2 - Connections that are created are instances of our own
-   *      MySqlConnection - which provides convenience methods for common
-   *      database operations.
-   *
-   * If you require additional control, you can access the mysqljs 'Pool' by
-   * going directly to the `pool` property of this object.
-   */
 
   /**
    * Create a new MySqlPool with the provided configuration.

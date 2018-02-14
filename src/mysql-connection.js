@@ -1,7 +1,34 @@
 const SqlUtil = require('./sql-util');
 
+/**
+ * MySqlConnection
+ * This class wraps a 'Connection' from mysqljs as described here:
+ *  + https://github.com/mysqljs/mysql#establishing-connections
+ *
+ * The basic benefits it provides are:
+ *  1 - `query` method returns a promise
+ *  2 - Provides a number of convenience methods for interacting with tables
+ *      that have an auto-incremented primary key named `id`
+ *
+ * If you require additional control, you can access the mysqljs 'Connection' by
+ * going directly to the `connection` property of this object.
+ */
 class MySqlConnection {
 
+  /**
+   * Create a new MySqlConnection wrapping the provided connection.
+   *
+   * Generally speaking, you will not invoke this constructor directly (but you
+   * can if you like).  You will usually get connections by:
+   *  + `mySqlEasier.getConnection()` -- To grab a connection from the global
+   *    pool.
+   *  + `myPool.getConnection()` -- Where `myPool` is a MySqlPool from
+   *    mysql-easier.
+   *
+   * When you are done with the connection, please call `myConnection.done()`.
+   * If the connection is pooled, it will release the connection back to its
+   * pool.  If it is not, it will just 'end' the connection.
+   */
   constructor(connection, config) {
     const debug = config && config.debug;
     this.connection = connection;
@@ -25,6 +52,11 @@ class MySqlConnection {
     return this.query(sql, id);
   }
 
+  /**
+   * Destroy the wrapped connection.  This stops all communication with the
+   * database on this connection.  If the connection is pooled, the pool will
+   * create a new connection to take its place.   *
+   */
   destroy() {
     if (this.connection) {
       this.connection.destroy();
@@ -33,7 +65,11 @@ class MySqlConnection {
   }
 
   /**
-   * Connection is no longer needed.
+   * Ends this instances interactions with the database.
+   *
+   * This should be called when you are done using the connection.  If it is a
+   * pooled connection, it will release the connection back to the pool.  If it
+   * isn't, it will `end` the connection.
    */
   done() {
     const conn = this.connection;
