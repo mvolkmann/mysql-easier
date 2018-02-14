@@ -73,7 +73,7 @@ class MySqlEasier {
    * example, if you require multiple simultaneous pools to exist at the same
    * time.
    *
-   * When you are done with the pool, you should call `myPool.end()`
+   * When you are done with the pool, you should call `myPool.end()`.
    */
   createPool(config) {
     return new MySqlPool(config);

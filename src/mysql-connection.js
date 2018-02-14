@@ -55,7 +55,7 @@ class MySqlConnection {
   /**
    * Destroy the wrapped connection.  This stops all communication with the
    * database on this connection.  If the connection is pooled, the pool will
-   * create a new connection to take its place.   *
+   * create a new connection to take its place.
    */
   destroy() {
     if (this.connection) {
