@@ -26,10 +26,10 @@ const myConn = await mySqlEasier.getConnection();
 
 // Do some database stuff
 
-const newId = await myConn.insert('food', {name: 'Orange', color: 'Orange'});
+const newId = await myConn.insert('food', {name: 'Apple', color: 'Red'});
 
 const aFruit = await myConn.getById('food', newId);
-console.log(aFruit.name) // Output: Orange
+console.log(aFruit.name) // Output: Apple
 
 await myConn.deleteById('food', newId);
 
@@ -63,15 +63,6 @@ const myConn = await mySqlEasier.getConnection();
 // Do some database stuff
 
 await myConn.done(); // Releases the connection back to the pool.
-
-// --OR--
-
-mySqlEasier.getConnection().then(myConn => {
-  // Do some database stuff
-
-  return myConn.done(); // Releases the connection back to the pool.
-});
-
 ```
 
 When you are done with your database interactions and ready to close your application, you can close the global pool:
@@ -149,7 +140,7 @@ To run the demo code, follow these steps:
 ### MySqlEasier
 
 This is a global object that represents the common use cases.
-It is intended to be a singleton in a node application to allow various modules to share a single MySQL connection pool.
+It is intended to be a singleton in a Node application to allow various modules to share a single MySQL connection pool.
 
 ```js
 const mySqlEasier = require('mysql-easier');
@@ -171,7 +162,7 @@ Creates a new MySqlConnection using a non-pooled connection with the provided co
 
 This method should only be used if you intentionally do not wish to use pooled connections.
 
-When you are done with the connection, you should call `myConnection.done()` or `myConnection.destroy()`.
+When you are done with the connection, you should call `myConnection.done()`.
 
 ```js
 const myConn = mySqlEasier.createConnection({
@@ -259,7 +250,7 @@ Deletes all records from a given table.
 
 ```js
 try {
-  const await connection.deleteAll('flavors');
+  await connection.deleteAll('flavors');
   // Do something after successful delete.
 } catch (e) {
   // Handle the error.
@@ -385,12 +376,12 @@ try {
 
 ```js
 try {
-  await connection.transaction(() => {
-    return connection.insert('flavors', {name: 'vanilla', calories: 100}).then(id => {
-      // If this insert fails, the entire transaction (including
-      // the outer insert) will rollback.
-      return connection.insert('flavor_rating', {flavorId: id, rating: 'Boring'});
-    });
+  await connection.transaction(async () => {
+    const id = await connection.insert('flavors', {name: 'vanilla', calories: 100});
+
+    // If the next insert fails, the entire transaction (including the previous
+    // insert) will rollback.
+    await connection.insert('flavor_rating', {flavorId: id, rating: 'Boring'});
   });
   // Do more work after the transaction commits.
 } catch (e) {
