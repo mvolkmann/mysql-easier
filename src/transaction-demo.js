@@ -1,5 +1,5 @@
-const MySqlConnection = require('./index');
-const mysql = new MySqlConnection({
+const mySqlEasier = require('./index');
+mySqlEasier.configure({
   //debug: true,
   host: 'localhost',
   user: 'root',
@@ -10,41 +10,43 @@ const mysql = new MySqlConnection({
 const tableName = 'demo_user';
 
 async function doIt() {
-  try {
-    const transactionResult = await mysql.transaction(async () => {
-      console.log('transaction-demo.js: inside transaction');
-      await mysql.deleteAll(tableName);
 
-      const id1 = await mysql.insert(tableName, {
+  try {
+    const conn = await mySqlEasier.getConnection();
+    const transactionResult = await conn.transaction(async () => {
+      console.log('transaction-demo.js: inside transaction');
+      await conn.deleteAll(tableName);
+
+      const id1 = await conn.insert(tableName, {
         username: 'batman',
         password: 'robin'
       });
       console.log('id1 =', id1);
 
-      const id2 = await mysql.insert(tableName, {
+      const id2 = await conn.insert(tableName, {
         username: 'joker',
         password: 'penguin'
       });
       console.log('id2 =', id2);
 
-      let result = await mysql.getAll(tableName);
+      let result = await conn.getAll(tableName);
       console.log('all =', result);
 
-      result = await mysql.updateById(tableName, id1, {
+      result = await conn.updateById(tableName, id1, {
         username: 'batman',
         password: 'wayne'
       });
 
-      result = await mysql.getById(tableName, id1);
+      result = await conn.getById(tableName, id1);
       console.log('just id1 after update =', result);
 
       const sql = `select * from ${tableName} where password = ?`;
-      result = await mysql.query(sql, 'wayne');
+      result = await conn.query(sql, 'wayne');
       console.log('query result =', result);
 
-      await mysql.deleteById(tableName, id1);
+      await conn.deleteById(tableName, id1);
 
-      result = await mysql.getAll(tableName);
+      result = await conn.getAll(tableName);
       console.log('after deleting id1 =', result);
 
       return result;
@@ -53,10 +55,11 @@ async function doIt() {
       'transaction-demo.js: result from transaction =',
       transactionResult
     );
+    await conn.done();
   } catch (e) {
     console.error(e);
   } finally {
-    mysql.disconnect();
+    await mySqlEasier.endPool();
   }
 }
 
