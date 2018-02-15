@@ -1,7 +1,7 @@
 {
   "name": "mysql-easier",
-  "version": "1.4.1",
-  "description": "A Node package for interacting with a MySQL database",
+  "version": "2.0.0",
+  "description": "A Node package for interacting with MySQL databases",
   "main": "lib/index.js",
   "scripts": {
     "dbsetup": "mysql -uroot < setup.sql",

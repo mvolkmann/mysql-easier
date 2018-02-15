@@ -12,8 +12,8 @@ const MySqlConnection = require('./mysql-connection');
  *      MySqlConnection - which provides convenience methods for common
  *      database operations.
  *
- * If you require additional control, you can access the mysqljs 'Pool' by
- * going directly to the `pool` property of this object.
+ * If you require additional control, you can access the mysqljs 'Pool'
+ * by going directly to the `pool` property of this object.
  */
 class MySqlPool {
 
@@ -24,9 +24,8 @@ class MySqlPool {
    *  + https://github.com/mysqljs/mysql#pool-options
    *
    * Generally speaking, you will get a MySql pool by calling either:
-   *  + `mySqlEasier.configure(config)` -- To create a global pool for the app
-   *  + `const myPool = mySqlEasier.createPool(config)` -- To create a new
-   *     pool
+   *  + `mySqlEasier.configure(config)` -- to create a global pool for the app
+   *  + `const myPool = mySqlEasier.createPool(config)` -- to create a new pool
    */
   constructor(config) {
     this.config = config;
@@ -34,8 +33,8 @@ class MySqlPool {
   }
 
   /**
-   * End this pool.  After the end operation is complete, connections that
-   * were retrieved from this pool will no longer function.
+   * End this pool.  After the end operation is complete, connections
+   * that were retrieved from this pool will no longer function.
    */
   end() {
     if (!this.pool) return Promise.resolve();
@@ -54,7 +53,7 @@ class MySqlPool {
   /**
    * Retrieve a MySqlConnection from this pool.
    *
-   * When you are done with the connection, please call `myConnection.done()`
+   * When you are done with the connection, call `myConnection.done()`
    * to release it back to the pool.
    */
   getConnection() {

@@ -10,24 +10,24 @@ const SqlUtil = require('./sql-util');
  *  2 - Provides a number of convenience methods for interacting with tables
  *      that have an auto-incremented primary key named `id`
  *
- * If you require additional control, you can access the mysqljs 'Connection' by
- * going directly to the `connection` property of this object.
+ * If you require additional control, you can access the mysqljs 'Connection'
+ * by going directly to the `connection` property of this object.
  */
 class MySqlConnection {
 
   /**
    * Create a new MySqlConnection wrapping the provided connection.
    *
-   * Generally speaking, you will not invoke this constructor directly (but you
-   * can if you like).  You will usually get connections by:
-   *  + `mySqlEasier.getConnection()` -- To grab a connection from the global
-   *    pool.
-   *  + `myPool.getConnection()` -- Where `myPool` is a MySqlPool from
-   *    mysql-easier.
+   * Generally speaking, you will not invoke this constructor directly
+   * (but you can if you like).  You will usually get connections by:
+   *  + `mySqlEasier.getConnection()` -- to grab a connection
+   *    from the global pool
+   *  + `myPool.getConnection()` -- where `myPool` is a MySqlPool from
+   *    mysql-easier
    *
-   * When you are done with the connection, please call `myConnection.done()`.
-   * If the connection is pooled, it will release the connection back to its
-   * pool.  If it is not, it will just 'end' the connection.
+   * When you are done with the connection, call `myConnection.done()`.
+   * If the connection is pooled, it will release the connection back
+   * to its pool.  If it is not, it will just 'end' the connection.
    */
   constructor(connection, config) {
     const debug = config && config.debug;
@@ -75,9 +75,7 @@ class MySqlConnection {
     const conn = this.connection;
     this.connection = null;
 
-    if (!conn) {
-      return Promise.resolve();
-    }
+    if (!conn) return Promise.resolve();
 
     if (typeof conn.release === 'function') {
       try {
@@ -185,6 +183,7 @@ class MySqlConnection {
       this.connection.beginTransaction(async err => {
         if (err) {
           reject(err);
+          return;
         }
 
         try {
