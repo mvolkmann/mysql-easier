@@ -10,7 +10,6 @@ mySqlEasier.configure({
 const tableName = 'demo_user';
 
 async function doIt() {
-
   try {
     const conn = await mySqlEasier.getConnection();
     const transactionResult = await conn.transaction(async () => {

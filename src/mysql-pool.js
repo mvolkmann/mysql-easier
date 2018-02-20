@@ -16,7 +16,6 @@ const MySqlConnection = require('./mysql-connection');
  * by going directly to the `pool` property of this object.
  */
 class MySqlPool {
-
   /**
    * Create a new MySqlPool with the provided configuration.
    *

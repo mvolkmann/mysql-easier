@@ -7,7 +7,6 @@ mySqlEasier.configure({
   database: 'demo'
 });
 
-
 async function doIt() {
   const tableName = 'demo_user';
 

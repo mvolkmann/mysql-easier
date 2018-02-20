@@ -1,5 +1,10 @@
 const SqlUtil = require('./sql-util');
 
+function maybeQuote(value) {
+  const t = typeof value;
+  return t === 'number' || t === 'boolean' ? value : `'${value}'`;
+}
+
 /**
  * MySqlConnection
  * This class wraps a 'Connection' from mysqljs as described here:
@@ -14,7 +19,6 @@ const SqlUtil = require('./sql-util');
  * by going directly to the `connection` property of this object.
  */
 class MySqlConnection {
-
   /**
    * Create a new MySqlConnection wrapping the provided connection.
    *
@@ -204,8 +208,9 @@ class MySqlConnection {
    * This requires the table to have a column named "id".
    */
   updateById(tableName, id, obj) {
+    const values = Object.values.map(value => maybeQuote(value));
     const sql = this.sqlUtil.updateById(tableName, id, obj);
-    return this.query(sql, id);
+    return this.query(sql, ...values, id);
   }
 
   /**

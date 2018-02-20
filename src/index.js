@@ -35,7 +35,6 @@ const MySqlPool = require('./mysql-pool');
  * `mySqlEasier.endPool()` to end the pool.
  */
 class MySqlEasier {
-
   /**
    * Creates a new MySqlEasier with a `null` pool.
    */
@@ -106,7 +105,6 @@ class MySqlEasier {
     if (!this.globalPool) return Promise.reject('Pool not configured');
     return this.globalPool.getConnection();
   }
-
 }
 
 module.exports = new MySqlEasier();

@@ -38,6 +38,13 @@ describe('sql', () => {
     expect(sqlUtil.insert(tableName, obj)).toEqual(expected);
   });
 
+  test('updateById', () => {
+    const id = 19;
+    const obj = {foo: true, bar: 7, baz: 'qux'};
+    const expected = `update ${tableName} set foo=?, bar=?, baz=? where id=?`;
+    expect(sqlUtil.updateById(tableName, id, obj)).toEqual(expected);
+  });
+
   test('upsert', () => {
     const obj = {foo: true, bar: 7, baz: 'qux'};
     const expected =

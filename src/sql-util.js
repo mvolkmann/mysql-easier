@@ -66,12 +66,8 @@ class SqlUtil {
    * This requires the table to have a column named "id".
    */
   updateById(tableName, id, obj) {
-    const sets = Object.keys(obj).map(key => {
-      const v = obj[key];
-      const value = typeof v === 'string' ? `'${v}'` : v;
-      return `${key}=${value}`;
-    });
-    const sql = `update ${tableName} set ${sets} where id=?`;
+    const sets = Object.keys(obj).map(key => `${key}=?`);
+    const sql = `update ${tableName} set ${sets.join(', ')} where id=?`;
     this.log('updateById: sql =', sql);
     return sql;
   }
