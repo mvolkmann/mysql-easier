@@ -203,6 +203,7 @@ class MySqlConnection {
    * This requires the table to have a column named "id".
    */
   updateById(tableName, id, obj) {
+    if (id === undefined) throw new Error('updateById requires id');
     const sql = this.sqlUtil.updateById(tableName, id, obj);
     return this.query(sql, ...Object.values(obj), id);
   }

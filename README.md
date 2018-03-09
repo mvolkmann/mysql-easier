@@ -13,7 +13,7 @@ Migrating from 1.x to 2.x?  See: [Migrating](#migrating-from-1x-to-2x)
 
 ## Installation
 
-To install mysql-easier, run `npm install -S mysql-easier`
+To install mysql-easier, run `npm install mysql-easier`
 
 ## General Use
 
