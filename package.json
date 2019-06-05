@@ -1,6 +1,6 @@
 {
   "name": "mysql-easier",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "description": "A Node package for interacting with MySQL databases",
   "main": "lib/index.js",
   "scripts": {
@@ -11,6 +11,7 @@
     "format": "prettier-eslint --write src/**/*.js",
     "lint": "eslint --quiet src --ext .js",
     "prepublish": "babel src -d lib",
+    "reinstall": "rm -rf node_modules package-lock.json && npm install",
     "test": "jest src",
     "trans": "node src/transaction-demo"
   },
@@ -35,13 +36,13 @@
     "mysql": "^2.15.0"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-eslint": "^8.1.2",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "eslint": "^4.13.1",
-    "jest": "^22.3.0",
-    "prettier": "^1.9.2",
-    "prettier-eslint-cli": "^4.7.0"
+    "@babel/cli": "^7.4.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
+    "@babel/preset-env": "^7.4.5",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "jest": "^24.8.0",
+    "prettier": "^1.17.1",
+    "prettier-eslint-cli": "^4.7.1"
   }
 }
