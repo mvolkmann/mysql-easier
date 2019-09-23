@@ -4,7 +4,8 @@
   "description": "A Node package for interacting with MySQL databases",
   "main": "lib/index.js",
   "scripts": {
-    "dbsetup": "mysql -uroot < setup.sql",
+    "dbi": "mysql -uroot -proot",
+    "dbsetup": "mysql -uroot -proot < setup.sql",
     "dbstart": "mysql.server start",
     "dbstop": "mysql.server stop",
     "demo": "node src/demo",

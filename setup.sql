@@ -7,5 +7,6 @@ create table demo_user (
   username text,
   password text,
   company text,
-  active bool
+  active bool,
+  small bit(1)
 );

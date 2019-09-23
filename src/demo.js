@@ -3,7 +3,7 @@ mySqlEasier.configure({
   //debug: true,
   host: 'localhost',
   user: 'root',
-  password: '',
+  password: 'root',
   database: 'demo'
 });
 
@@ -16,7 +16,10 @@ async function doIt() {
 
     const id1 = await conn.insert(tableName, {
       username: 'batman',
-      password: 'robin'
+      password: 'robin',
+      company: 'Wayne Enterprises',
+      active: true,
+      small: 1
     });
     console.log('id1 =', id1);
 
@@ -28,6 +31,9 @@ async function doIt() {
 
     let result = await conn.getAll(tableName);
     console.log('all =', result);
+
+    const [batman] = result;
+    console.log('batman.small =', batman.small.readInt8());
 
     result = await conn.updateById(tableName, id1, {
       username: 'batman',
